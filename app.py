@@ -3,7 +3,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
 from sqlalchemy import ForeignKey, Table, Column, String, Integer
 from marshmallow import ValidationError
 from typing import List, Optional
@@ -26,8 +26,8 @@ ma = Marshmallow(app)
 
 # Association Table
 user_book = Table(
-    "user_book"
-    BaseMeta,
+    "user_book",
+    Base.metadata,
     Column("user_id", ForeignKey("user_account.id"), primary_key=True),
     Column("book_id", ForeignKey("books.id"), primary_key=True)
 )
@@ -42,7 +42,7 @@ class User(Base):
 
     #One-to-Many relationship from this User to a List of Book Objects
     books: Mapped[List["Book"]] = relationship(
-            "Pet",
+            "Book",
             secondary=user_book,
             back_populates="users"
     )
