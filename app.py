@@ -9,3 +9,7 @@ import os
 # Initialize Flask app
 app = Flask(__name__)
 
+# MySQL database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
