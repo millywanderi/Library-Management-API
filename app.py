@@ -31,3 +31,18 @@ user_book = Table(
     Column("user_id", ForeignKey("user_account.id"), primary_key=True),
     Column("book_id", ForeignKey("books.id"), primary_key=True)
 )
+
+# Models
+# User Model
+class User(Base):
+    __tablename__ = "user_account"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(200))
+
+    #One-to-Many relationship from this User to a List of Book Objects
+    books: Mapped[List["Book"]] = relationship(
+            "Pet",
+            secondary=user_book,
+            back_populates="users"
+    )
