@@ -67,3 +67,9 @@ class Book(Base):
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
+
+
+# Book Schema
+class BookSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Book
