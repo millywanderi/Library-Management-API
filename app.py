@@ -62,3 +62,8 @@ class Book(Base):
             back_populates="books"
     )
 
+# Marshmallow Schemas
+# User Schema
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
