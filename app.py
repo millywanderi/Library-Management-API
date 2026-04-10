@@ -73,3 +73,9 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 class BookSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Book
+
+# Initialize Schemas
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+book_schema = BookSchema()
+books_schema = BookSchema(many=True)
