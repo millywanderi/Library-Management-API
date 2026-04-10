@@ -54,3 +54,11 @@ class Book(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
     author: Mapped[str] = mapped_column(String(100))
+
+    #One-to-Many relationship,1 book can be related to a List of Users
+    users: Mapped[List["User"]] = relationship(
+            "User",
+            secondary=user_book,
+            back_populates="books"
+    )
+
