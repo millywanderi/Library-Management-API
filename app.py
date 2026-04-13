@@ -79,3 +79,25 @@ user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)
+
+# Create endpoints
+# Create User
+@app.route('/users', methods=['POST'])
+def create_user():
+    try:
+        user_data = user_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+
+    new_user = User(name=user_data['name'], email=user_data['email'])
+    db.session.add(new_user)
+    db.session.commit()
+
+    return user_schema.jsonify(new_user), 201
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+
+    app.run(debug=True)
