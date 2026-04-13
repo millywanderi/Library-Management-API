@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
-from sqlalchemy import ForeignKey, Table, Column, String, Integer
+from sqlalchemy import ForeignKey, Table, Column, String, Integer, select
 from marshmallow import ValidationError
 from typing import List, Optional
 
@@ -79,3 +79,85 @@ user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)
+
+# Create endpoints
+# Create User
+@app.route('/users', methods=['POST'])
+def create_user():
+    try:
+        user_data = user_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+
+    new_user = User(name=user_data['name'], email=user_data['email'])
+    db.session.add(new_user)
+    db.session.commit()
+
+    return user_schema.jsonify(new_user), 201
+
+# Read All Users
+@app.route('/users', methods=['Get'])
+def get_users():
+    query = select(User)
+    users = db.session.execute(query).scalars().all()
+
+    return users_schema.jsonify(users), 200
+
+# Read a Single User by ID
+@app.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    user = db.session.get(User, id)
+    return user_schema.jsonify(user), 200
+
+# Update User
+@app.route('/users/<int:id>', methods=['PUT'])
+def update_user(id):
+    user = db.session.get(User, id)
+
+    if not user:
+        return jsonify({"message": "Invalid User id"}), 400
+
+    try:
+        user_data = user_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+
+    user.name = user_data['name']
+    user.email = user_data['email']
+
+    db.session.commit()
+    return user_schema.jsonify(user), 200
+
+# Delete User
+@app.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = db.session.get(User, id)
+
+    if not user:
+        return jsonify({"message": "Invalid user id"}), 400
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"message": f"successfully deleted user {id}"}), 200
+
+# Create Book and Associate Books with Users
+# Create a Book
+@app.route('/books', methods=['POST'])
+def create_book():
+    try:
+        book_data = book_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.message), 400
+
+    new_book = Book(title=book_data['title'], author=book_data['author'])
+    db.session.add(new_book)
+    db.session.commit()
+
+    return book_schema.jsonify(new_book), 201
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+
+    app.run(debug=True)
