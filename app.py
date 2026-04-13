@@ -140,6 +140,21 @@ def delete_user(id):
     db.session.commit()
     return jsonify({"message": f"successfully deleted user {id}"}), 200
 
+# Create Book and Associate Books with Users
+# Create a Book
+@app.route('/books', methods=['POST'])
+def create_book():
+    try:
+        book_data = book_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.message), 400
+
+    new_book = Book(title=book_data['title'], author=book_data['author'])
+    db.session.add(new_book)
+    db.session.commit()
+
+    return book_schema.jsonify(new_book), 201
+
 
 if __name__ == "__main__":
     with app.app_context():
