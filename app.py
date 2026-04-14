@@ -165,6 +165,29 @@ def allocate_book(user_id, book_id):
     db.session.commit()
     return jsonify({"message": f"{user.name} allocated the {book.author}, {book.title}!"}), 200
 
+# Associate Multiple Books with a User
+@app.route('/users/<int:user_id>/add_books', methods=['POST'])
+def allocate_books(user_id):
+    user = db.session.get(User, user_id)
+    book_data = request.json
+    
+    if not book_data or 'book_ids' not in book_data:
+        return jsonify({"error": "book_ids is not required!"}), 400
+
+
+    for book_id in book_data['book_ids']:
+        book = db.session.get(Book, book_id)
+
+        if not book:
+            continue
+
+        if book not in user.books:
+            user.books.append(book)
+        
+    db.session.commit()
+
+    return jsonify({"message": "All books allocated!"}), 200
+
 
 if __name__ == "__main__":
     with app.app_context():
