@@ -155,6 +155,16 @@ def create_book():
 
     return book_schema.jsonify(new_book), 201
 
+# Associate a Single Book with a User
+@app.route('/users/<int:user_id>/add_book/<int:book_id>', methods=['Get'])
+def allocate_book(user_id, book_id):
+    user = db.session.get(User, user_id)
+    book = db.session.get(Book, book_id)
+
+    user.books.append(book)
+    db.session.commit()
+    return jsonify({"message": f"{user.name} allocated the {book.author}, {book.title}!"}), 200
+
 
 if __name__ == "__main__":
     with app.app_context():
