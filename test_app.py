@@ -18,3 +18,19 @@ class TestLibraryApi(unittest.TestCase):
         with app.app_context():
             db.session.remove()
             db.drop_all()
+
+    # ------------------------
+    # USER TESTS
+    # ------------------------
+    def test_create_user(self):
+        payload = {
+            "name": "Millicent Wanderi",
+            "email": "millicentw@example.com"
+        }
+
+        response = self.app.post('/users', json=payload)
+        data = response.get_json()
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data['name'], "Millicent Wanderi")
+
