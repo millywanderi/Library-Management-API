@@ -60,3 +60,21 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['name'], "Millicent")
 
+    def test_update_user(self):
+        res = self.app.post('/users', json={
+            "name": "Bob",
+            "email": "bob@example.com"
+        })
+
+        user_id = res.et_json()['id']
+
+        response = self.app.put(f'/users/{user_id}', json={
+            "name": "Bob Updated",
+            "email": "bob2@example.com"
+        })
+
+        data = response.get_json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['name'], "Bob Updated")
+
