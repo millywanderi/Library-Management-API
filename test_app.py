@@ -45,3 +45,18 @@ class TestLibraryApi(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.asserEqual(len(data), 1)
+
+    def test_get_single_user(self):
+        res = self.app.post('/users', json={
+            "name": "Millicent",
+            "email": "millicent@example"
+        })
+
+        user_id = res.get_json()['id']
+
+        response = self.app.get(f'/users/{user_id}')
+        data = response.get_json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['name'], "Millicent")
+
