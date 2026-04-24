@@ -78,3 +78,18 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['name'], "Bob Updated")
 
+    def test_delete_user(self):
+        res = self.app.post('/users', json={
+            "name": "ToDelete",
+            "email": "todelete@example.com"
+        })
+
+        user_id = res.get_json()['id']
+
+        response = self.app.delete(f'/user/{user_id}')
+        data = response.get_json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("successfully deleted", data['message'])
+
+
