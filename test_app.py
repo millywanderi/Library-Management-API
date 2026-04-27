@@ -131,3 +131,31 @@ class TestLibraryApi(unittest.TestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn("allocated", data['message'])
 
+        def test_allocate_multiple_books(self):
+            user = self.app.post('/users', json={
+                "name": "Multiuser",
+                "email": "multiuser@example.com"
+            }).get_json()
+
+            book1 = self.app.post('/books', json={
+                "title": "Book A",
+                "author": "A"
+            }).get_json()
+
+            book2 = self.app.post('/books', json={
+                "title": "Book B",
+                "author": "B"
+            }).get_json()
+
+            response = self.app.post(f"/users/{user['id']}/add_books", json={
+                "book_ids": [book1['id'], book2['id']]
+            })
+
+            data = response.get_json()
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(data['message'], "All books allocated!")
+
+
+if __name__ == '__main__':
+    unittest.main()
