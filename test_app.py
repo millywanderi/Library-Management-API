@@ -106,3 +106,28 @@ class TestLibraryApi(unittest.TestCase):
 
         self.assertEqual(response, status_code, 201)
         self.assertEqual(data['title'], "Flask Guide")
+
+        # --------------------
+        # Relationship Tests
+        # --------------------
+
+        def test_allocate_book(self):
+            user = self.app.post('/users', json={
+                "name": "Reader",
+                "email":"reader@example.com"
+            }).get_json()
+            
+            book = self.app.post('/books', json={
+                "title": "Book A",
+                "author": "Author A"
+            }).get_json()
+
+            response = self.app.get(
+                f"/users/{user['id']}/add_book/{book['id']}"
+            )
+
+            data = response.get_json()
+
+            self.assertEqual(response.status_code, 201)
+            self.assertIn("allocated", data['message'])
+
