@@ -1,19 +1,22 @@
 import unittest
-from app import app, db
+from app import app, db, configure_app
 
 
 class TestLibraryApi(unittest.TestCase):
 
-    def SetUp(self):
+    def setUp(self):
         """Runs before each test"""
+        configure_app('sqlite:///:memory:')
+
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///:memory'
+        #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///:memory'
         
-        self.app = app.test_client()
         self.app_context = app.app_context()
         self.app_context.push()
         
         db.create_all()
+
+        self.app = app.test_client()
 
     def tearDown(self):
         """Runs after each test"""    
@@ -25,12 +28,11 @@ class TestLibraryApi(unittest.TestCase):
     # USER TESTS
     # ------------------------
     def test_create_user(self):
-        payload = {
+        response = self.app.post('/users', json={
             "name": "Millicent Wanderi",
             "email": "millicentw@example.com"
-        }
+        })
 
-        response = self.app.post('/users', json=payload)
         data = response.get_json()
 
         self.assertEqual(response.status_code, 201)
@@ -106,7 +108,7 @@ class TestLibraryApi(unittest.TestCase):
 
         data = response.get_json()
 
-        self.assertEqual(response, status_code, 201)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(data['title'], "Flask Guide")
 
         # --------------------
