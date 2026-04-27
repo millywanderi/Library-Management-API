@@ -95,3 +95,14 @@ class TestLibraryApi(unittest.TestCase):
     # --------------------
     # Book tests
     # --------------------
+
+    def test_create_book(self):
+        response = self.app.post('/books', json={
+            "title": "Flask Guide",
+            "author": "Minguel"
+        })
+
+        data = response.get_json()
+
+        self.assertEqual(response, status_code, 201)
+        self.assertEqual(data['title'], "Flask Guide")
