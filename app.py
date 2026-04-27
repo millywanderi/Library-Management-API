@@ -11,18 +11,26 @@ from typing import List, Optional
 # Initialize Flask app
 app = Flask(__name__)
 
-# MySQL database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 # Creating our Base Model
 class Base(DeclarativeBase):
     pass
 
-# Initialize SQLAlchemy and Marshmallow
+# Initialize SQLAlchemy (DO NOT bind yet)
 db = SQLAlchemy(model_class=Base)
-db.init_app(app)
-ma = Marshmallow(app)
+ma = Marshmallow()
+
+# Function to configure app
+def configure_app(database_uri=None):
+    if database_uri:
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API'
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    # NOW initialize extensions
+    db.init_app(app)
+    ma.init_app(app)
 
 # Association Table
 user_book = Table(
