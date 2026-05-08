@@ -9,7 +9,7 @@ from marshmallow import ValidationError
 from typing import List, Optional
 
 # Initialize Flask app
-app = Flask(__name__)
+#app = Flask(__name__)
 
 # Creating our Base Model
 class Base(DeclarativeBase):
@@ -20,7 +20,9 @@ db = SQLAlchemy(model_class=Base)
 ma = Marshmallow()
 
 # Function to configure app
-def configure_app(database_uri=None):
+def create_app(database_uri=None):
+    app = Flask(__name__)
+
     if database_uri:
         app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     else:
@@ -31,6 +33,8 @@ def configure_app(database_uri=None):
     # NOW initialize extensions
     db.init_app(app)
     ma.init_app(app)
+    
+    return app
 
 # Association Table
 user_book = Table(
