@@ -1,22 +1,21 @@
 import unittest
-from app import app, db, configure_app
+from app import create_app, db
 
 
 class TestLibraryApi(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test"""
-        configure_app('sqlite:///:memory:')
-
-        app.config['TESTING'] = True
+        self.app = create_app('sqlite:///:memory:')
+        self.app.config['TESTING'] = True
         #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///:memory'
         
-        self.app_context = app.app_context()
+        self.app_context = self.app.app_context()
         self.app_context.push()
         
         db.create_all()
 
-        self.app = app.test_client()
+        self.client = self.app.test_client()
 
     def tearDown(self):
         """Runs after each test"""    
