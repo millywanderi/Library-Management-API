@@ -34,9 +34,9 @@ def create_app(database_uri=None):
     db.init_app(app)
     ma.init_app(app)
     
-    return app
+    #return app
 
-app = create_app()
+#app = create_app()
 
 # Association Table
 user_book = Table(
@@ -94,116 +94,118 @@ users_schema = UserSchema(many=True)
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)
 
-# Create endpoints
-# Create User
-@app.route('/users', methods=['POST'])
-def create_user():
-    try:
-        user_data = user_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify(e.messages), 400
+    # Create endpoints
+    # Create User
+    @app.route('/users', methods=['POST'])
+    def create_user():
+        try:
+            user_data = user_schema.load(request.json)
+        except ValidationError as e:
+            return jsonify(e.messages), 400
 
-    new_user = User(name=user_data['name'], email=user_data['email'])
-    db.session.add(new_user)
-    db.session.commit()
+        new_user = User(name=user_data['name'], email=user_data['email'])
+        db.session.add(new_user)
+        db.session.commit()
 
-    return user_schema.jsonify(new_user), 201
+        return user_schema.jsonify(new_user), 201
 
-# Read All Users
-@app.route('/users', methods=['GET'])
-def get_users():
-    query = select(User)
-    users = db.session.execute(query).scalars().all()
+    # Read All Users
+    @app.route('/users', methods=['GET'])
+    def get_users():
+        query = select(User)
+        users = db.session.execute(query).scalars().all()
 
-    return users_schema.jsonify(users), 200
+        return users_schema.jsonify(users), 200
 
-# Read a Single User by ID
-@app.route('/users/<int:id>', methods=['GET'])
-def get_user(id):
-    user = db.session.get(User, id)
-    return user_schema.jsonify(user), 200
+    # Read a Single User by ID
+    @app.route('/users/<int:id>', methods=['GET'])
+    def get_user(id):
+        user = db.session.get(User, id)
+        return user_schema.jsonify(user), 200
 
-# Update User
-@app.route('/users/<int:id>', methods=['PUT'])
-def update_user(id):
-    user = db.session.get(User, id)
+    # Update User
+    @app.route('/users/<int:id>', methods=['PUT'])
+    def update_user(id):
+        user = db.session.get(User, id)
 
-    if not user:
-        return jsonify({"message": "Invalid User id"}), 400
+        if not user:
+            return jsonify({"message": "Invalid User id"}), 400
 
-    try:
-        user_data = user_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify(e.messages), 400
+        try:
+            user_data = user_schema.load(request.json)
+        except ValidationError as e:
+            return jsonify(e.messages), 400
 
-    user.name = user_data['name']
-    user.email = user_data['email']
+        user.name = user_data['name']
+        user.email = user_data['email']
 
-    db.session.commit()
-    return user_schema.jsonify(user), 200
+        db.session.commit()
+        return user_schema.jsonify(user), 200
 
-# Delete User
-@app.route('/users/<int:id>', methods=['DELETE'])
-def delete_user(id):
-    user = db.session.get(User, id)
+    # Delete User
+    @app.route('/users/<int:id>', methods=['DELETE'])
+    def delete_user(id):
+        user = db.session.get(User, id)
 
-    if not user:
-        return jsonify({"message": "Invalid user id"}), 400
+        if not user:
+            return jsonify({"message": "Invalid user id"}), 400
 
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({"message": f"successfully deleted user {id}"}), 200
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": f"successfully deleted user {id}"}), 200
 
-# Create Book and Associate Books with Users
-# Create a Book
-@app.route('/books', methods=['POST'])
-def create_book():
-    try:
-        book_data = book_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify(e.messages), 400
+    # Create Book and Associate Books with Users
+    # Create a Book
+    @app.route('/books', methods=['POST'])
+    def create_book():
+        try:
+            book_data = book_schema.load(request.json)
+        except ValidationError as e:
+            return jsonify(e.messages), 400
 
-    new_book = Book(title=book_data['title'], author=book_data['author'])
-    db.session.add(new_book)
-    db.session.commit()
+        new_book = Book(title=book_data['title'], author=book_data['author'])
+        db.session.add(new_book)
+        db.session.commit()
 
-    return book_schema.jsonify(new_book), 201
+        return book_schema.jsonify(new_book), 201
 
-# Associate a Single Book with a User
-@app.route('/users/<int:user_id>/add_book/<int:book_id>', methods=['GET'])
-def allocate_book(user_id, book_id):
-    user = db.session.get(User, user_id)
-    book = db.session.get(Book, book_id)
-
-    user.books.append(book)
-    db.session.commit()
-    return jsonify({"message": f"{user.name} allocated the {book.author}, {book.title}!"}), 200
-
-# Associate Multiple Books with a User
-@app.route('/users/<int:user_id>/add_books', methods=['POST'])
-def allocate_books(user_id):
-    user = db.session.get(User, user_id)
-    book_data = request.json
-    
-    if not book_data or 'book_ids' not in book_data:
-        return jsonify({"error": "book_ids is not required!"}), 400
-
-
-    for book_id in book_data['book_ids']:
+    # Associate a Single Book with a User
+    @app.route('/users/<int:user_id>/add_book/<int:book_id>', methods=['GET'])
+    def allocate_book(user_id, book_id):
+        user = db.session.get(User, user_id)
         book = db.session.get(Book, book_id)
 
-        if not book:
-            continue
+        user.books.append(book)
+        db.session.commit()
+        return jsonify({"message": f"{user.name} allocated the {book.author}, {book.title}!"}), 200
 
-        if book not in user.books:
-            user.books.append(book)
+    # Associate Multiple Books with a User
+    @app.route('/users/<int:user_id>/add_books', methods=['POST'])
+    def allocate_books(user_id):
+        user = db.session.get(User, user_id)
+        book_data = request.json
+    
+        if not book_data or 'book_ids' not in book_data:
+            return jsonify({"error": "book_ids is not required!"}), 400
+
+
+        for book_id in book_data['book_ids']:
+            book = db.session.get(Book, book_id)
+
+            if not book:
+                continue
+
+            if book not in user.books:
+                user.books.append(book)
         
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify({"message": "All books allocated!"}), 200
+        return jsonify({"message": "All books allocated!"}), 200
 
 
 if __name__ == "__main__":
+    app = create_app()
+
     with app.app_context():
         db.create_all()
 
