@@ -110,54 +110,54 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data['title'], "Flask Guide")
 
-        # --------------------
-        # Relationship Tests
-        # --------------------
+    # --------------------
+    # Relationship Tests
+    # --------------------
 
-        def test_allocate_book(self):
-            user = self.client.post('/users', json={
-                "name": "Reader",
-                "email":"reader@example.com"
-            }).get_json()
+    def test_allocate_book(self):
+        user = self.client.post('/users', json={
+            "name": "Reader",
+            "email":"reader@example.com"
+        }).get_json()
             
-            book = self.client.post('/books', json={
-                "title": "Book A",
-                "author": "Author A"
-            }).get_json()
+        book = self.client.post('/books', json={
+            "title": "Book A",
+            "author": "Author A"
+        }).get_json()
 
-            response = self.client.get(
-                f"/users/{user['id']}/add_book/{book['id']}"
-            )
+        response = self.client.get(
+            f"/users/{user['id']}/add_book/{book['id']}"
+        )
 
-            data = response.get_json()
+        data = response.get_json()
 
-            self.assertEqual(response.status_code, 201)
-            self.assertIn("allocated", data['message'])
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("allocated", data['message'])
 
-        def test_allocate_multiple_books(self):
-            user = self.client.post('/users', json={
-                "name": "Multiuser",
-                "email": "multiuser@example.com"
-            }).get_json()
+    def test_allocate_multiple_books(self):
+        user = self.client.post('/users', json={
+            "name": "Multiuser",
+            "email": "multiuser@example.com"
+        }).get_json()
 
-            book1 = self.client.post('/books', json={
-                "title": "Book A",
-                "author": "A"
-            }).get_json()
+        book1 = self.client.post('/books', json={
+            "title": "Book A",
+            "author": "A"
+        }).get_json()
 
-            book2 = self.client.post('/books', json={
-                "title": "Book B",
-                "author": "B"
-            }).get_json()
+        book2 = self.client.post('/books', json={
+            "title": "Book B",
+            "author": "B"
+        }).get_json()
 
-            response = self.client.post(f"/users/{user['id']}/add_books", json={
-                "book_ids": [book1['id'], book2['id']]
-            })
+        response = self.client.post(f"/users/{user['id']}/add_books", json={
+            "book_ids": [book1['id'], book2['id']]
+        })
 
-            data = response.get_json()
+        data = response.get_json()
 
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(data['message'], "All books allocated!")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['message'], "All books allocated!")
 
 
 if __name__ == '__main__':
