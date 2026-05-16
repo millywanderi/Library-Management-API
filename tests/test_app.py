@@ -27,7 +27,7 @@ class TestLibraryApi(unittest.TestCase):
     # USER TESTS
     # ------------------------
     def test_create_user(self):
-        response = self.app.post('/users', json={
+        response = self.client.post('/users', json={
             "name": "Millicent Wanderi",
             "email": "millicentw@example.com"
         })
@@ -38,7 +38,7 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(data['name'], "Millicent Wanderi")
 
     def test_get_users(self):
-        self.app.post('/users', json={
+        self.client.post('/users', json={
             "name": "Millicent Wanderi",
             "email": "millicentw@example.com"
         })
@@ -47,10 +47,10 @@ class TestLibraryApi(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
-        self.asserEqual(len(data), 1)
+        self.assertEqual(len(data), 1)
 
     def test_get_single_user(self):
-        res = self.app.post('/users', json={
+        res = self.client.post('/users', json={
             "name": "Millicent",
             "email": "millicent@example"
         })
@@ -64,14 +64,14 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(data['name'], "Millicent")
 
     def test_update_user(self):
-        res = self.app.post('/users', json={
+        res = self.client.post('/users', json={
             "name": "Bob",
             "email": "bob@example.com"
         })
 
-        user_id = res.et_json()['id']
+        user_id = res.get_json()['id']
 
-        response = self.app.put(f'/users/{user_id}', json={
+        response = self.client.put(f'/users/{user_id}', json={
             "name": "Bob Updated",
             "email": "bob2@example.com"
         })
@@ -82,14 +82,14 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(data['name'], "Bob Updated")
 
     def test_delete_user(self):
-        res = self.app.post('/users', json={
+        res = self.client.post('/users', json={
             "name": "ToDelete",
             "email": "todelete@example.com"
         })
 
         user_id = res.get_json()['id']
 
-        response = self.app.delete(f'/user/{user_id}')
+        response = self.client.delete(f'/users/{user_id}')
         data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
@@ -100,7 +100,7 @@ class TestLibraryApi(unittest.TestCase):
     # --------------------
 
     def test_create_book(self):
-        response = self.app.post('/books', json={
+        response = self.client.post('/books', json={
             "title": "Flask Guide",
             "author": "Minguel"
         })
@@ -115,17 +115,17 @@ class TestLibraryApi(unittest.TestCase):
         # --------------------
 
         def test_allocate_book(self):
-            user = self.app.post('/users', json={
+            user = self.client.post('/users', json={
                 "name": "Reader",
                 "email":"reader@example.com"
             }).get_json()
             
-            book = self.app.post('/books', json={
+            book = self.client.post('/books', json={
                 "title": "Book A",
                 "author": "Author A"
             }).get_json()
 
-            response = self.app.get(
+            response = self.client.get(
                 f"/users/{user['id']}/add_book/{book['id']}"
             )
 
@@ -135,22 +135,22 @@ class TestLibraryApi(unittest.TestCase):
             self.assertIn("allocated", data['message'])
 
         def test_allocate_multiple_books(self):
-            user = self.app.post('/users', json={
+            user = self.client.post('/users', json={
                 "name": "Multiuser",
                 "email": "multiuser@example.com"
             }).get_json()
 
-            book1 = self.app.post('/books', json={
+            book1 = self.client.post('/books', json={
                 "title": "Book A",
                 "author": "A"
             }).get_json()
 
-            book2 = self.app.post('/books', json={
+            book2 = self.client.post('/books', json={
                 "title": "Book B",
                 "author": "B"
             }).get_json()
 
-            response = self.app.post(f"/users/{user['id']}/add_books", json={
+            response = self.client.post(f"/users/{user['id']}/add_books", json={
                 "book_ids": [book1['id'], book2['id']]
             })
 
