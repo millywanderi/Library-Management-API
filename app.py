@@ -81,6 +81,7 @@ class Book(Base):
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
+        load_instance = True
 
 
 # Book Schema
@@ -201,6 +202,8 @@ books_schema = BookSchema(many=True)
         db.session.commit()
 
         return jsonify({"message": "All books allocated!"}), 200
+
+     return app
 
 
 if __name__ == "__main__":
