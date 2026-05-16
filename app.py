@@ -34,7 +34,9 @@ def create_app(database_uri=None):
     db.init_app(app)
     ma.init_app(app)
     
-    #return app
+    return app
+
+app = create_app()
 
 # Association Table
 user_book = Table(
