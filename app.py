@@ -110,7 +110,7 @@ def create_user():
     return user_schema.jsonify(new_user), 201
 
 # Read All Users
-@app.route('/users', methods=['Get'])
+@app.route('/users', methods=['GET'])
 def get_users():
     query = select(User)
     users = db.session.execute(query).scalars().all()
@@ -161,7 +161,7 @@ def create_book():
     try:
         book_data = book_schema.load(request.json)
     except ValidationError as e:
-        return jsonify(e.message), 400
+        return jsonify(e.messages), 400
 
     new_book = Book(title=book_data['title'], author=book_data['author'])
     db.session.add(new_book)
@@ -170,7 +170,7 @@ def create_book():
     return book_schema.jsonify(new_book), 201
 
 # Associate a Single Book with a User
-@app.route('/users/<int:user_id>/add_book/<int:book_id>', methods=['Get'])
+@app.route('/users/<int:user_id>/add_book/<int:book_id>', methods=['GET'])
 def allocate_book(user_id, book_id):
     user = db.session.get(User, user_id)
     book = db.session.get(Book, book_id)
