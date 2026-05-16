@@ -43,7 +43,7 @@ class TestLibraryApi(unittest.TestCase):
             "email": "millicentw@example.com"
         })
 
-        response = self.app.get('/users')
+        response = self.client.get('/users')
         data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
