@@ -57,7 +57,7 @@ class TestLibraryApi(unittest.TestCase):
 
         user_id = res.get_json()['id']
 
-        response = self.app.get(f'/users/{user_id}')
+        response = self.client.get(f'/users/{user_id}')
         data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
