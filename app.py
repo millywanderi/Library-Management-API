@@ -257,7 +257,7 @@ def create_app(database_uri=None):
 # Run Application
 if __name__ == "__main__":
 
-    app = create_app()
+    app = create_app('ProductionConfig')
 
     with app.app_context():
         db.create_all()
