@@ -8,6 +8,12 @@ class developmentConfig:
     CACHE_TYPE = "SimpleCache"
 
 
+class TestingConfig:
+    Debug = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    CACHE_TYPE = "SimpleCache"
+
+
 class ProductionConfig:
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI)
     CACHE_TYPE = "SimpleCache"
