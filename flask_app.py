@@ -87,7 +87,8 @@ def create_app(database_uri=None):
     app = Flask(__name__)
 
     if database_uri:
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+        app.config.from_object(config_object)
+        #app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             'mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API'
