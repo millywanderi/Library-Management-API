@@ -82,11 +82,11 @@ books_schema = BookSchema(many=True)
 
 
 # Create Flask App
-def create_app(database_uri=None):
+def create_app(config_object=None):
 
     app = Flask(__name__)
 
-    if database_uri:
+    if config_object:
         app.config.from_object(config_object)
         #app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     else:
