@@ -3,14 +3,12 @@ from flask_app import create_app, db
 from config import TestingConfig
 
 
-self.app = create_app(TestingConfig)
-
-
 class TestLibraryApi(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test"""
-        self.app = create_app('sqlite:///:memory:')
+
+        self.app = create_app(TestingConfig)
         self.app.config['TESTING'] = True
         #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///:memory'
         
