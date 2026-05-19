@@ -1,5 +1,5 @@
 import unittest
-from app import create_app, db
+from flask_app import create_app, db
 
 
 class TestLibraryApi(unittest.TestCase):
