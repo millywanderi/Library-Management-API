@@ -7,6 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
 from sqlalchemy import ForeignKey, Table, Column, String, select
 from marshmallow import ValidationError
 from typing import List
+from config import ProductionConfig
 
 
 # Creating Base Model
@@ -257,7 +258,7 @@ def create_app(database_uri=None):
 # Run Application
 if __name__ == "__main__":
 
-    app = create_app('ProductionConfig')
+    app = create_app(ProductionConfig)
 
     with app.app_context():
         db.create_all()
