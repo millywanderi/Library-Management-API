@@ -4,13 +4,14 @@ import os
 
 class developmentConfig:
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API"
-    Debug = True
+    DEBUG = True
     CACHE_TYPE = "SimpleCache"
 
 
 class TestingConfig:
-    Debug = True
+    DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     CACHE_TYPE = "SimpleCache"
 
 
