@@ -255,13 +255,13 @@ def create_app(config_object=None):
 
     return app
 
-#app = create_app(ProductionConfig)
+app = create_app(ProductionConfig)
 
 
 # Run Application
 if __name__ == "__main__":
 
-    app = create_app(ProductionConfig)
+    #app = create_app(ProductionConfig)
 
     with app.app_context():
         db.create_all()
