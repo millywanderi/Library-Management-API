@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class developmentConfig:
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API"
