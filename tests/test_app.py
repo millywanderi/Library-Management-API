@@ -10,17 +10,17 @@ class TestLibraryApi(unittest.TestCase):
 
         self.app = create_app(TestingConfig)
         self.app.config['TESTING'] = True
-        #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite///:memory'
-        
+
         self.app_context = self.app.app_context()
         self.app_context.push()
-        
+
         db.create_all()
 
         self.client = self.app.test_client()
 
     def tearDown(self):
-        """Runs after each test"""    
+        """Runs after each test"""
+
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
@@ -28,6 +28,7 @@ class TestLibraryApi(unittest.TestCase):
     # ------------------------
     # USER TESTS
     # ------------------------
+
     def test_create_user(self):
         response = self.client.post('/users', json={
             "name": "Millicent Wanderi",
@@ -54,7 +55,7 @@ class TestLibraryApi(unittest.TestCase):
     def test_get_single_user(self):
         res = self.client.post('/users', json={
             "name": "Millicent",
-            "email": "millicent@example"
+            "email": "millicent@example.com"
         })
 
         user_id = res.get_json()['id']
@@ -98,13 +99,13 @@ class TestLibraryApi(unittest.TestCase):
         self.assertIn("successfully deleted", data['message'])
 
     # --------------------
-    # Book tests
+    # BOOK TESTS
     # --------------------
 
     def test_create_book(self):
         response = self.client.post('/books', json={
             "title": "Flask Guide",
-            "author": "Minguel"
+            "author": "Miguel"
         })
 
         data = response.get_json()
@@ -113,15 +114,15 @@ class TestLibraryApi(unittest.TestCase):
         self.assertEqual(data['title'], "Flask Guide")
 
     # --------------------
-    # Relationship Tests
+    # RELATIONSHIP TESTS
     # --------------------
 
     def test_allocate_book(self):
         user = self.client.post('/users', json={
             "name": "Reader",
-            "email":"reader@example.com"
+            "email": "reader@example.com"
         }).get_json()
-            
+
         book = self.client.post('/books', json={
             "title": "Book A",
             "author": "Author A"
@@ -152,9 +153,12 @@ class TestLibraryApi(unittest.TestCase):
             "author": "B"
         }).get_json()
 
-        response = self.client.post(f"/users/{user['id']}/add_books", json={
-            "book_ids": [book1['id'], book2['id']]
-        })
+        response = self.client.post(
+            f"/users/{user['id']}/add_books",
+            json={
+                "book_ids": [book1['id'], book2['id']]
+            }
+        )
 
         data = response.get_json()
 
