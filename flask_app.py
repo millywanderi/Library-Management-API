@@ -91,7 +91,7 @@ def create_app(config_object=None):
         #app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = (
-            'mysql+mysqlconnector://millie:ciku2015@localhost/Library_Management_API'
+            os.environ.get('SQLALCHEMY_DATABASE_URI')
         )
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
