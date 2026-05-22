@@ -21,8 +21,4 @@ class TestingConfig:
 
 class ProductionConfig:
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    
-    if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("Missing SQLALCHEMY_DATABASE_URI in environment variables")
-
     CACHE_TYPE = "SimpleCache"
