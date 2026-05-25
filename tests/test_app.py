@@ -1,6 +1,6 @@
 import unittest
 from flask_app import create_app, db
-from config import TestingConfig
+from config import TestingConfig, ProductionConfig
 
 
 class TestLibraryApi(unittest.TestCase):
@@ -8,15 +8,18 @@ class TestLibraryApi(unittest.TestCase):
     def setUp(self):
         """Runs before each test"""
 
-        self.app = create_app(TestingConfig)
+        self.app = create_app(ProductionConfig)
+
+        # Override DB for testing
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
         self.app.config['TESTING'] = True
 
         self.app_context = self.app.app_context()
         self.app_context.push()
 
-        db.create_all()
-
         self.client = self.app.test_client()
+
+        db.create_all()
 
     def tearDown(self):
         """Runs after each test"""
