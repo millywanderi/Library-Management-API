@@ -103,9 +103,6 @@ def create_app(config_object=None):
     # ONLY check for DB in production runtime (not import)
     if not app.config.get("SQLALCHEMY_DATABASE_URI"):
         raise RuntimeError("Missing DATABASE URL (set in Render env vars)")
-    with app.app_context():
-        db.create_all()
-    return app
 
     # -----------------------------------
     # USER ROUTES
