@@ -11,7 +11,7 @@ class TestLibraryApi(unittest.TestCase):
         self.app = create_app()
 
         # Override DB for testing
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
         self.app.config['TESTING'] = True
 
         self.app_context = self.app.app_context()
