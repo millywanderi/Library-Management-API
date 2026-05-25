@@ -8,7 +8,7 @@ class TestLibraryApi(unittest.TestCase):
     def setUp(self):
         """Runs before each test"""
 
-        self.app = create_app(ProductionConfig)
+        self.app = create_app()
 
         # Override DB for testing
         self.app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
