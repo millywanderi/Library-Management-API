@@ -8,7 +8,7 @@ from sqlalchemy import ForeignKey, Table, Column, String, select
 from marshmallow import ValidationError
 from typing import List
 from config import ProductionConfig
-
+import os
 
 # Creating Base Model
 class Base(DeclarativeBase):
