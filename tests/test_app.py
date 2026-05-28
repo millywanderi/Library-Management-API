@@ -1,7 +1,7 @@
 import unittest
 from flask_app import create_app, db
 from config import TestingConfig, ProductionConfig
-
+import os
 
 class TestLibraryApi(unittest.TestCase):
 
