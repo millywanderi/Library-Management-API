@@ -8,7 +8,7 @@ class TestLibraryApi(unittest.TestCase):
     def setUp(self):
         """Runs before each test"""
 
-        self.app = create_app()
+        self.app = create_app(testing=True)
 
         # Override DB for testing
         self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
