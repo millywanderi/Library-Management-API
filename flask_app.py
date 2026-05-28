@@ -82,27 +82,41 @@ books_schema = BookSchema(many=True)
 
 
 # Create Flask App
-def create_app(config_object=None):
-
+def create_app(config_object=None, testing=False):
     app = Flask(__name__)
 
-    if config_object:
+    # -------------------------
+    # DEFAULT CONFIG
+    # -------------------------
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    # -------------------------
+    # TESTING CONFIG (PRIORITY)
+    # -------------------------
+    if testing:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+
+    # -------------------------
+    # CONFIG OBJECT OVERRIDE
+    # -------------------------
+    elif config_object:
         app.config.from_object(config_object)
-        #app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+
+    # -------------------------
+    # PRODUCTION CONFIG
+    # -------------------------
     else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = (
-            os.environ.get('SQLALCHEMY_DATABASE_URI')
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+            "SQLALCHEMY_DATABASE_URI"
         )
 
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Safety check ONLY after config is resolved
+    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError("Missing DATABASE URL (set env var or testing config)")
 
     # Initialize extensions
     db.init_app(app)
     ma.init_app(app)
-
-    # ONLY check for DB in production runtime (not import)
-    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
-        raise RuntimeError("Missing DATABASE URL (set in Render env vars)")
 
     # -----------------------------------
     # USER ROUTES
