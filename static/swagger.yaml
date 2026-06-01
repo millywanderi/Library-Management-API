@@ -16,3 +16,12 @@ securityDefinitions:
     type: "apiKey" 
     name: "Authorization" 
     in: "header"
+
+paths: 
+  /members/login: 
+    post: 
+      tags: 
+        - "Members" 
+      
+      summary: "Login endpoint" 
+      description: "Validates member credentials and returns an authentication token."
