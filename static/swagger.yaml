@@ -25,3 +25,12 @@ paths:
       
       summary: "Login endpoint" 
       description: "Validates member credentials and returns an authentication token."
+
+      parameters: 
+        - in: "body" 
+          name: "body" 
+          description: "Login credentials" 
+          required: true 
+
+          schema: 
+            $ref: "#/definitions/LoginCredentials"
