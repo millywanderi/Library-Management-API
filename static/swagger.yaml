@@ -34,3 +34,10 @@ paths:
 
           schema: 
             $ref: "#/definitions/LoginCredentials"
+
+      responses: 
+        200: 
+          description: "Login successful" 
+
+          schema: 
+            $ref: "#/definitions/LoginResponse"
