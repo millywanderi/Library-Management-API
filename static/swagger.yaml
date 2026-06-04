@@ -41,3 +41,12 @@ paths:
 
           schema: 
             $ref: "#/definitions/LoginResponse"
+
+  /members: 
+
+  post: 
+    tags: 
+      - "Members" 
+    
+    summary: "Create a new member" 
+    description: "Registers a new library member. Email must be unique."
