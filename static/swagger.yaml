@@ -50,3 +50,12 @@ paths:
     
     summary: "Create a new member" 
     description: "Registers a new library member. Email must be unique."
+
+  parameters: 
+    - in: "body" 
+      name: "body" 
+      description: "Member information" 
+      required: true 
+
+      schema: 
+        $ref: "#/definitions/CreateMemberPayload"
