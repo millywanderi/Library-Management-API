@@ -44,18 +44,25 @@ paths:
 
   /members: 
 
-  post: 
-    tags: 
-      - "Members" 
+    post: 
+      tags: 
+        - "Members" 
     
-    summary: "Create a new member" 
-    description: "Registers a new library member. Email must be unique."
+      summary: "Create a new member" 
+      description: "Registers a new library member. Email must be unique."
 
-  parameters: 
-    - in: "body" 
-      name: "body" 
-      description: "Member information" 
-      required: true 
+    parameters: 
+      - in: "body" 
+        name: "body" 
+        description: "Member information" 
+        required: true 
 
-      schema: 
-        $ref: "#/definitions/CreateMemberPayload"
+        schema: 
+          $ref: "#/definitions/CreateMemberPayload"
+
+    responses: 
+      201: 
+        description: "Member created successfully" 
+
+        schema: 
+          $ref: "#/definitions/CreateMemberResponse"
