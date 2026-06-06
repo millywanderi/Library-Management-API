@@ -60,9 +60,23 @@ paths:
         schema: 
           $ref: "#/definitions/CreateMemberPayload"
 
-    responses: 
-      201: 
-        description: "Member created successfully" 
+      responses: 
+        201: 
+          description: "Member created successfully" 
 
         schema: 
           $ref: "#/definitions/CreateMemberResponse"
+
+    get: 
+      tags: 
+        - "Members" 
+
+      summary: "Get all members" 
+      description: "Retrieve a list of all library members." 
+
+      responses: 
+        200: 
+        description: "Members retrieved successfully" 
+
+        schema: 
+          $ref: "#/definitions/AllMembers"
