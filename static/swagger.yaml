@@ -3,7 +3,7 @@ info:
   title: "Library API"
   description: "API to manage library system"
   version: "1.0.0"
-host: "127.0.0.1.500"
+host: "library-management-api-pguh.onrender.com"
 schemes: 
   - "https"
 consumes:
