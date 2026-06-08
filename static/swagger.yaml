@@ -80,3 +80,29 @@ paths:
 
         schema: 
           $ref: "#/definitions/AllMembers"
+
+    put: 
+      tags: 
+        - "Members" 
+
+      summary: "Update member" 
+      description: "Update a member account. Requires authentication." 
+      
+      security: - bearerAuth: [] 
+
+      parameters: 
+        - in: "body" 
+          name: "body" 
+          description: "Updated member information" 
+          required: true 
+
+          schema: 
+            $ref: "#/definitions/UpdateMemberPayload" 
+
+      responses: 
+        200: 
+          description: "Member updated successfully" 
+
+          schema: 
+            $ref: "#/definitions/UpdateMemberResponse"
+
