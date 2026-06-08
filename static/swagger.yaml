@@ -174,16 +174,13 @@ definitions:
       password: 
         type: "string"
 
-  CreateMemberPayload: 
+  CreateMemberResponse: 
     type: "object" 
 
-    required: 
-      - "name" 
-      - "email" 
-      - "DOB" 
-      - "password" 
-
     properties: 
+      id: 
+        type: "integer" 
+
       name: 
         type: "string" 
 
@@ -192,7 +189,6 @@ definitions:
 
       DOB: 
         type: "string" 
-        format: "date" 
 
       password: 
         type: "string"
