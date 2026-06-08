@@ -106,3 +106,20 @@ paths:
           schema: 
             $ref: "#/definitions/UpdateMemberResponse"
 
+    delete: 
+      tags: 
+        - "Members" 
+
+      summary: "Delete member" 
+      description: "Delete a member account. Requires authentication." 
+
+      security: - bearerAuth: [] 
+
+      responses: 
+        200: 
+          description: "Member deleted successfully" 
+
+          schema: 
+            $ref: "#/definitions/DeleteMemberResponse"
+
+
