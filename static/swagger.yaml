@@ -122,4 +122,13 @@ paths:
           schema: 
             $ref: "#/definitions/DeleteMemberResponse"
 
+definitions: 
+  
+  LoginCredentials: 
+    type: "object" 
+
+    required: 
+      - "email" 
+      - "password"
+
 
