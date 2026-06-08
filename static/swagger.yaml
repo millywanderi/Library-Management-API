@@ -257,4 +257,9 @@ definitions:
       password: 
         type: "string"
 
+  DeleteMemberResponse: 
+    type: "object" 
 
+    properties: 
+      message: 
+        type: "string"
