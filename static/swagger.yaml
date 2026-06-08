@@ -174,4 +174,27 @@ definitions:
       password: 
         type: "string"
 
+  CreateMemberPayload: 
+    type: "object" 
+
+    required: 
+      - "name" 
+      - "email" 
+      - "DOB" 
+      - "password" 
+
+    properties: 
+      name: 
+        type: "string" 
+
+      email: 
+        type: "string" 
+
+      DOB: 
+        type: "string" 
+        format: "date" 
+
+      password: 
+        type: "string"
+
 
