@@ -137,3 +137,18 @@ definitions:
 
       password: 
         type: "string"
+
+  LoginResponse: 
+    type: "object" 
+
+    properties: 
+      token: 
+        type: "string" 
+
+      message: 
+        type: "string" 
+
+      status: 
+        type: "string"
+
+
